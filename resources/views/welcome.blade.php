@@ -68,7 +68,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/admin/home') }}">Home</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
@@ -81,7 +81,13 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    @php
+                        if(Auth::check()){
+                            echo 'Sei loggato';
+                        } else {
+                            echo 'Non sei loggato';
+                        }
+                    @endphp
                 </div>
 
                 <div class="links">
