@@ -29,3 +29,12 @@ Route::middleware('auth')
         Route::get('/home', 'HomeController@index')->name('home');
         Route::resource('posts', 'PostController');
 });
+
+// Route::middleware('auth')
+//     ->namespace('Admin')
+//     ->name('admin.')
+//     ->prefix('admin')
+//     ->group(function () {
+//         Route::get('/', 'AdminController@dashboard')->name('dashboard');
+//         Route::resource('posts', 'PostController');
+// });
