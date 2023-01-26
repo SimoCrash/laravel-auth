@@ -35,6 +35,6 @@ Route::middleware('auth')
     ->name('admin.')
     ->prefix('admin')
     ->group(function () {
-        Route::get('/', 'AdminController@dashboard')->name('dashboard');
+        Route::get('/', 'PageController@dashboard')->name('dashboard');
         Route::resource('posts', 'PostController');
 });
