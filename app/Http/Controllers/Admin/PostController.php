@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
@@ -40,7 +41,30 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validation
+        $request->validate([
+            'slag'      => 'required|string|max:100|unique:posts',
+            'title'     => 'required|string|max:100',
+            'image'     => 'string|max:100',
+            'content'   => 'string',
+            'except'    => 'string',
+        ]);
+
+
+        //richiesta dati al db
+        $data = $request->all();
+
+        //salvare i dati nel db
+        $post = new Post;
+        $post->slag = $data['slag']; 
+        $post->title = $data['title'];
+        $post->image = $data['image'];
+        $post->content = $data['content']; 
+        $post->except = $data['except'];
+        $post->save();
+
+        //ridirezione 
+        return redirect()->route('admin.posts.show', ['post' => $post]);            
     }
 
     /**
@@ -62,7 +86,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -74,7 +98,34 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        //validation
+        $request->validate([
+            'slag'      => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('posts')->ignore($post),
+            ],
+            'title'     => 'required|string|max:100',
+            'image'     => 'string|max:100',
+            'content'   => 'string',
+            'except'    => 'string',
+        ]);
+
+
+        //richiesta dati al db
+        $data = $request->all();
+
+        //salvare i dati nel db
+        $post->slag = $data['slag']; 
+        $post->title = $data['title'];
+        $post->image = $data['image'];
+        $post->content = $data['content']; 
+        $post->except = $data['except'];
+        $post->update();
+
+        //ridirezione 
+        return redirect()->route('admin.posts.show', ['post' => $post]);
     }
 
     /**
@@ -85,6 +136,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('admin.posts.index')->with('success_delete', $post);
     }
 }
