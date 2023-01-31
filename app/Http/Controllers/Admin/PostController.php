@@ -6,6 +6,7 @@ use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -46,6 +47,7 @@ class PostController extends Controller
             'slag'      => 'required|string|max:100|unique:posts',
             'title'     => 'required|string|max:100',
             'image'     => 'string|max:100',
+            'uploaded_img' => 'image|max:70',
             'content'   => 'string',
             'except'    => 'string',
         ]);
@@ -54,11 +56,14 @@ class PostController extends Controller
         //richiesta dati al db
         $data = $request->all();
 
+        $img_path = Storage::put('uploads', $data['uploaded_img']);
+
         //salvare i dati nel db
         $post = new Post;
         $post->slag = $data['slag']; 
         $post->title = $data['title'];
         $post->image = $data['image'];
+        $post->uploaded_img = $img_path;
         $post->content = $data['content']; 
         $post->except = $data['except'];
         $post->save();
@@ -109,6 +114,7 @@ class PostController extends Controller
             'title'     => 'required|string|max:100',
             'image'     => 'string|max:100',
             'content'   => 'string',
+            'uploaded_img' => 'image|max:70',
             'except'    => 'string',
         ]);
 
@@ -116,10 +122,15 @@ class PostController extends Controller
         //richiesta dati al db
         $data = $request->all();
 
+        $img_path = Storage::put('uploads', $data['uploaded_img']);
+
+        Storage::delete($post->uploaded_img);
+
         //salvare i dati nel db
         $post->slag = $data['slag']; 
         $post->title = $data['title'];
         $post->image = $data['image'];
+        $post->uploaded_img = $img_path;
         $post->content = $data['content']; 
         $post->except = $data['except'];
         $post->update();

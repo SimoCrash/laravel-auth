@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <form action="{{ route('admin.posts.update', ['post' => $post]) }}" method="post" class="row g-3 needs-validation" novalidate>
+        <form action="{{ route('admin.posts.update', ['post' => $post]) }}" method="post" class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
             @method('PUT')
             @csrf
             <form class="row g-3 needs-validation" novalidate>
@@ -46,6 +46,21 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                  <label for="uploaded_img" class="form-label">Immagine</label>
+                  <input class="form-control @error('image') is-invalid @enderror" type="file" id="uploaded_img" name="uploaded_img">
+                  <div class="invalid-feedback">
+                    @error('uploaded_img')
+                    <ul>
+                      @foreach ($errors->get('uploaded_img') as $error)
+                          <li>{{ $error }}</li>
+                      @endforeach  
+                    </ul>
+                @enderror
+                </div>
+                <div>
+                  <img src="{{ asset('storage/' . $post->uploaded_img) }}" alt="{{ $post->title }}">
+                </div>
+                <div class="mb-3">
                     <label for="content" class="form-label">Contenuto</label>
                     <textarea class="form-control @error('content') is-invalid @enderror" id="content" name="content">{{ old('content', $post->content) }}</textarea>
                     <div class="invalid-feedback">
@@ -72,7 +87,7 @@
                     </div>
                 </div>
                 <div class="col-12">
-                  <button class="btn btn-primary" type="submit">Submit form</button>
+                  <button class="btn btn-primary" type="submit">Modifica</button>
                 </div>
               </form>
         </form>
