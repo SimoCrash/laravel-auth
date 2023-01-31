@@ -47,7 +47,7 @@ class PostController extends Controller
             'slag'      => 'required|string|max:100|unique:posts',
             'title'     => 'required|string|max:100',
             'image'     => 'string|max:100',
-            'uploaded_img' => 'image|max:70',
+            'uploaded_img' => 'required|image|max:10240',
             'content'   => 'string',
             'except'    => 'string',
         ]);
@@ -114,7 +114,7 @@ class PostController extends Controller
             'title'     => 'required|string|max:100',
             'image'     => 'string|max:100',
             'content'   => 'string',
-            'uploaded_img' => 'image|max:70',
+            'uploaded_img' => 'required|image|max:10240',
             'except'    => 'string',
         ]);
 
